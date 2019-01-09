@@ -31,24 +31,7 @@
   </style>
 </head>
 <body>
-<div class="treeHTML">Сайт
-  <div>Блог
-    <details>
-      <summary></summary>
-      <div>HTML</div>
-      <div>CSS</div>
-      <div>JavaScript
-        <details>
-          <summary></summary>
-          <div>HTML</div>
-          <div>CSS</div>
-          <div>JavaScript</div>
-        </details>
-      </div>
-    </details>
-  </div>
-  <div>Контакты</div>
-</div>
+
 </body>
 <script>
   (function () {
@@ -88,31 +71,34 @@
         }
       ]
     }];
-
+    
     const getListItems = (structureItems) => {
-      console.log('structureItems', structureItems);
       return structureItems.map((element) => {
-        const { id, name } = element;
         const nested = element.children;
-        var div = document.createElement("div");
-        div.textContent = name;
-        div.setAttribute('id', id);
-        console.log('name', name);
-        console.log('nested', nested);
+        let div = document.createElement('div');
+        div.textContent = element.name;
         if (nested.length !== 0) {
-          let _nest = getListItems(nested);
-          console.log('_nest',_nest)
-          div.appendChild(_nest);
+
+          let details = document.createElement('details');
+          let summary = document.createElement('summary');
+          details.appendChild(summary);
+          getListItems(nested).map((item)=>{
+            details.appendChild(item);
+          });
+          div.appendChild(details)
         }
-        return div;
+
+        return div
       })
     }
 
 
-    var div = document.createElement("div");
-    div.textContent = '111111111';
-    div.appendChild(getListItems(content));
-    document.body.appendChild(div);
+    var root = document.createElement("div");
+    getListItems(content).map((item) => {
+      root.appendChild(item);
+    })
+    root.classList.add('treeHTML');
+    document.body.appendChild(root);
   }())
 </script>
 </html>
