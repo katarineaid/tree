@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .treeHTML {
+      line-height: normal;
+    }
+
+    .treeHTML details {
+      display: block;
+    }
+
+    .treeHTML div {
+      position: relative;
+      margin: 0 0 0 .5em;
+      padding: 0 0 0 1.2em;
+    }
+
+    .treeHTML summary { /* стилями можно задать любую форму, например, тот же плюс. Я специально не стала усложнять, чтобы можно было проще разобраться в коде */
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .treeHTML details[open] summary { /* убрать рамку при фокусе */
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+<div class="treeHTML">Сайт
+  <div>Блог
+    <details>
+      <summary></summary>
+      <div>HTML</div>
+      <div>CSS</div>
+      <div>JavaScript
+        <details>
+          <summary></summary>
+          <div>HTML</div>
+          <div>CSS</div>
+          <div>JavaScript</div>
+        </details>
+      </div>
+    </details>
+  </div>
+  <div>Контакты</div>
+</div>
+</body>
+<script>
+  (function () {
+
+    let content = [{
+      id: 'id1',
+      name: "Блог",
+      parent: '',
+      children: [
+        {
+          id: 'id2',
+          name: "HTML",
+          parent: 'id1',
+          children: []
+        }, {
+          id: 'id3',
+          name: "CSS",
+          parent: 'id1',
+          children: []
+        }, {
+          id: 'id4',
+          name: "JavaScript",
+          parent: 'id1',
+          children: [
+            {
+              id: 'id5',
+              name: "JavaScript_1",
+              parent: 'id4',
+              children: []
+            }, {
+              id: 'id6',
+              name: "JavaScript_2",
+              parent: 'id4',
+              children: []
+            }
+          ]
+        }
+      ]
+    }];
+
+    const getListItems = (structureItems) => {
+      console.log('structureItems', structureItems);
+      return structureItems.map((element) => {
+        const { id, name } = element;
+        const nested = element.children;
+        var div = document.createElement("div");
+        div.textContent = name;
+        div.setAttribute('id', id);
+        console.log('name', name);
+        console.log('nested', nested);
+        if (nested.length !== 0) {
+          let _nest = getListItems(nested);
+          console.log('_nest',_nest)
+          div.appendChild(_nest);
+        }
+        return div;
+      })
+    }
+
+
+    var div = document.createElement("div");
+    div.textContent = '111111111';
+    div.appendChild(getListItems(content));
+    document.body.appendChild(div);
+  }())
+</script>
+</html>
